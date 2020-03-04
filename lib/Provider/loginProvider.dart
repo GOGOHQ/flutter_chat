@@ -1,7 +1,16 @@
 import 'dart:async';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat/Pages/mainPage.dart';
+import 'package:flutter_chat/Provider/signalRProvider.dart';
+import 'package:flutter_chat/Router/fade_router.dart';
+import 'package:flutter_chat/Utils/imeiUtil.dart';
+import 'package:flutter_chat/Utils/sqliteHelper.dart';
 import 'package:flutter_chat/http/API.dart';
+import 'package:flutter_chat/http/http_request.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginProvider extends State<StatefulWidget>
     with ChangeNotifier, TickerProviderStateMixin {
@@ -13,7 +22,11 @@ class LoginProvider extends State<StatefulWidget>
   bool ifValidUserName = false;
   bool ifStartRequest = false;
   Timer timer;
+  String imei;
   String userName;
+
+  SqliteHelper sqliteHelper;
+  int curLoginWidget; //0 quick 1 normal
   List<String> backgrounds = [
     "images/login/background0.jpg",
     "images/login/background1.jpg",
@@ -24,20 +37,51 @@ class LoginProvider extends State<StatefulWidget>
   int showIndex = 0;
   int toChangeIndex = 1;
   LoginProvider() {
+    curLoginWidget = 0;
     userNameController.addListener(() {
       userName = userNameController.text;
       ifValidUserName = checkValidUserName(userName);
       notifyListeners();
     });
     initBackGroundAnimation();
-    timer = Timer.periodic(Duration(seconds: 4), (callback) {
+    timer = Timer.periodic(Duration(seconds: 3), (callback) {
       bgAnimationController.forward(from: 0);
     });
   }
+  ifUserExistsByTelNo(BuildContext context) async {
+    ifStartRequest = true;
+    notifyListeners();
+
+    await Future.delayed(Duration(seconds: 1));
+    imei = await ImeiUtil.getImei();
+    print("imei$imei");
+    var result = await API.ifUserExistsByTelNo("18296998548", imei);
+    ifStartRequest = false;
+    notifyListeners();
+    if (result["result"] == true) {
+      sqliteHelper = SqliteHelper();
+      await sqliteHelper.delCurLoginRecord();
+      String loginId = result["userId"];
+      await sqliteHelper.addNewLogin(loginId, imei);
+      Navigator.of(context).pushAndRemoveUntil(
+          FadeRoute(page: MainPage()), ModalRoute.withName("/home"));
+    } else {
+      BotToast.showText(
+          text: "当前手机号未注册",
+          textStyle: TextStyle(fontSize: 12, color: Colors.white));
+    }
+  }
+
   @override
   void dispose() {
     bgAnimationController?.dispose();
+    timer?.cancel();
     super.dispose();
+  }
+
+  changeLoginBox() {
+    curLoginWidget = curLoginWidget == 0 ? 1 : 0;
+    notifyListeners();
   }
 
   @override

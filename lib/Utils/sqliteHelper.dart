@@ -10,19 +10,23 @@ class SqliteHelper {
     _dbDir = await getDatabasesPath();
     _db = await openDatabase(p.join(_dbDir, _dbName),
         onCreate: (database, version) {
-      return database.execute('''
-        create tbl_curlogin
-        loginId TEXT PRIMARY KEY,
-        loginDate DATETIME NOT NULL,
-        imei TEXT NOT NULL
-      ''');
-    }, version: 1);
+          return database.execute(
+            '''
+        create table tbl_curlogin(
+          loginId TEXT PRIMARY KEY,
+          loginDate DATETIME NOT NULL,
+          imei TEXT NOT NULL
+        );
+        
+      ''',
+          );
+        }, version: 1);
   }
 
   addNewLogin(String loginId, String imei) async {
     await initDB();
     UserLoginModel loginModel =
-        UserLoginModel(loginId: loginId, loginDate: DateTime.now(), imei: imei);
+    UserLoginModel(loginId: loginId, loginDate: DateTime.now(), imei: imei);
     await _db.insert("tbl_curlogin", loginModel.toJson());
     await _db.close();
   }

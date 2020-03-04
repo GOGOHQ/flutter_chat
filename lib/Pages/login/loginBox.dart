@@ -55,7 +55,7 @@ class LoginBox extends StatelessWidget {
                       buildPassWordInput(pwdController),
                       buildHelpRow(),
                       buildLoginButton(loginProvider, context),
-                      buildLocalLogin()
+                      buildLocalLogin(loginProvider)
                     ],
                   ),
                 ),
@@ -107,13 +107,13 @@ class LoginBox extends StatelessWidget {
     );
   }
 
-  Widget buildLocalLogin() {
+  Widget buildLocalLogin(LoginProvider loginProvider) {
     return Container(
       margin: EdgeInsets.only(top: ScreenUtil().setWidth(20)),
       child: Center(
           child: FlatButton(
         onPressed: () {
-          // loginProvider.changeLoginBox();
+          loginProvider.changeLoginBox();
         },
         child: Text(
           "本机一键登录",
@@ -268,11 +268,12 @@ class QuickLoginBox extends StatelessWidget {
   Widget build(BuildContext context) {
     LoginProvider provider = Provider.of<LoginProvider>(context);
 
-    double margin = ScreenUtil().setWidth(45);
+    double margin = ScreenUtil().setWidth(15);
     return BackdropFilter(
         filter: ImageFilter.blur(
-            sigmaX: ScreenUtil().setWidth(10),
-            sigmaY: ScreenUtil().setWidth(10)),
+          sigmaX: ScreenUtil().setWidth(3),
+          sigmaY: ScreenUtil().setWidth(4),
+        ),
         child: Container(
             width: ScreenUtil().setWidth(750) - 2 * margin,
             margin: EdgeInsets.symmetric(horizontal: margin),
@@ -313,7 +314,7 @@ class QuickLoginBox extends StatelessWidget {
                               margin: EdgeInsets.symmetric(
                                   vertical: ScreenUtil().setWidth(140)),
                               child: Text(
-                                "186 **** 0612",
+                                "182 **** 8548",
                                 style: TextStyle(
                                     fontSize: ScreenUtil().setSp(50),
                                     fontFamily: "Pangmen"),
@@ -354,7 +355,7 @@ class QuickLoginBox extends StatelessWidget {
                                                     ScreenUtil().setSp(35)),
                                           ),
                                     onPressed: () {
-                                      // provider.ifUserExistsByTelNo(context);
+                                      provider.ifUserExistsByTelNo(context);
                                     },
                                   ),
                                 ))
@@ -367,7 +368,7 @@ class QuickLoginBox extends StatelessWidget {
                             child: Center(
                                 child: FlatButton(
                               onPressed: () {
-                                // provider.changeLoginBox();
+                                provider.changeLoginBox();
                               },
                               child: Text(
                                 "其他登录方式",

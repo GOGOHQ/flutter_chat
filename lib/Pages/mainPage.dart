@@ -3,16 +3,12 @@ import 'package:flutter_chat/Common/staticMembers.dart';
 import 'package:flutter_chat/Model/chatContentModel.dart';
 import 'package:flutter_chat/Provider/bottomRowAnimaProvider.dart';
 import 'package:flutter_chat/Provider/chatListProvider.dart';
-import 'package:flutter_chat/Provider/chooseFileProvider.dart';
-import 'package:flutter_chat/Provider/gaodeMapProvider.dart';
-import 'package:flutter_chat/Provider/jPushProvider.dart';
 import 'package:flutter_chat/Provider/signalRProvider.dart';
 import 'package:flutter_chat/Provider/themeProvider.dart';
 import 'package:flutter_chat/Provider/voiceRecoderProvider.dart';
 import 'package:flutter_chat/Provider/xfVoiceProvider.dart';
-import 'package:flutter_chat/Router/fade_router.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:provider/provider.dart';
 import 'chatDetail/chatDetail.dart';
 import 'mapPage/gaodeMapPage.dart';
@@ -233,6 +229,7 @@ class ChatItem extends StatelessWidget {
                   ChangeNotifierProvider(
                     create: (_) => BottomRowAnimProvider(context),
                   ),
+                  ChangeNotifierProvider(create: (_) => SignalRProvider()),
                 ],
                 child: DetailPage(
                   index: index,

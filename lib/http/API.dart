@@ -9,8 +9,21 @@ class API {
         await HttpRequest.post("/user/addNewUser", data, querys: querys);
     return result;
   }
-  static checkIfSameIMEI(String loginId,String iMEI){
-    Map<String,dynamic> querys ={"loginId":loginId,"IMEI":iMEI};
-    
+
+  static ifUserExistsByTelNo(String telNo, String imei) async {
+    Map<String, dynamic> querys = {"telNo": telNo, "imei": imei};
+    final result = await HttpRequest.get("/user/ifUserExistsByTelNo",
+        queryParameters: querys);
+    return result;
+  }
+
+  static Future<bool> checkIfSameIMEI(String loginId, String iMEI) async {
+    Map<String, dynamic> querys = {"loginId": loginId, "IMEI": iMEI};
+    final result =
+        await HttpRequest.get("/user/ifSameIMEI", queryParameters: querys);
+    if (result['ifSame'] == true) {
+      return true;
+    }
+    return false;
   }
 }

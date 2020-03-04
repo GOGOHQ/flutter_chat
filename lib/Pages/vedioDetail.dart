@@ -26,13 +26,13 @@ class _VedioPageState extends State<VedioPage> {
     videoPlayerController = VideoPlayerController.file(File(widget.playData));
     videoPlayerController.initialize().then((_) {
       chewieController = ChewieController(
-          allowFullScreen: false,
-          allowMuting: false,
-          looping: false,
-          videoPlayerController: videoPlayerController,
-          aspectRatio: videoPlayerController.value.aspectRatio,
-          autoPlay: false,
-          overlay: Text('data', style: TextStyle(color: Colors.white)));
+        allowFullScreen: false,
+        allowMuting: false,
+        looping: false,
+        videoPlayerController: videoPlayerController,
+        aspectRatio: videoPlayerController.value.aspectRatio,
+        autoPlay: false,
+      );
       setState(() {
         isShowVideo = true;
       });

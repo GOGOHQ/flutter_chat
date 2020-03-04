@@ -62,74 +62,74 @@ class _ChatRowState extends State<ChatRow> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return widget.record.sender == SENDER.SELF
         ? Container(
-            padding: EdgeInsets.only(
-                left: ScreenUtil().setWidth(15.0),
-                bottom: ScreenUtil().setWidth(15.0),
-                top: ScreenUtil().setWidth(40.0)),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                CircleAvatar(
-                  backgroundImage: NetworkImage(widget.record.avatarUrl),
-                ),
-                Container(
-                  width: ScreenUtil().setWidth(550),
-                  child: Bubble(
-                      color: widget.record.chatType == CHATTYPE.LOCATION ||
-                              widget.record.chatType == CHATTYPE.IMAGE
-                          ? Colors.white
-                          : Color.fromRGBO(225, 255, 199, 1.0),
-                      padding: widget.record.chatType == CHATTYPE.LOCATION
-                          ? BubbleEdges.all(0)
-                          : BubbleEdges.only(
-                              top: ScreenUtil().setWidth(15),
-                              left: ScreenUtil().setWidth(30),
-                              right: ScreenUtil().setWidth(30)),
-                      margin: BubbleEdges.only(
-                          top: ScreenUtil().setWidth(45.0),
-                          left: ScreenUtil().setWidth(15.0)),
-                      alignment: Alignment.topLeft,
-                      nip: BubbleNip.leftTop,
-                      child: buildChatContent(
-                          widget.record, widget.voiceRecoderProvider,
-                          location: location, area: businessArea)),
-                ),
-              ],
-            ),
-          )
+      padding: EdgeInsets.only(
+          left: ScreenUtil().setWidth(15.0),
+          bottom: ScreenUtil().setWidth(15.0),
+          top: ScreenUtil().setWidth(40.0)),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          CircleAvatar(
+            backgroundImage: NetworkImage(widget.record.avatarUrl),
+          ),
+          Container(
+            width: ScreenUtil().setWidth(550),
+            child: Bubble(
+                color: widget.record.chatType == CHATTYPE.LOCATION ||
+                    widget.record.chatType == CHATTYPE.IMAGE
+                    ? Colors.white
+                    : Color.fromRGBO(225, 255, 199, 1.0),
+                padding: widget.record.chatType == CHATTYPE.LOCATION
+                    ? BubbleEdges.all(0)
+                    : BubbleEdges.only(
+                    top: ScreenUtil().setWidth(15),
+                    left: ScreenUtil().setWidth(30),
+                    right: ScreenUtil().setWidth(30)),
+                margin: BubbleEdges.only(
+                    top: ScreenUtil().setWidth(45.0),
+                    left: ScreenUtil().setWidth(15.0)),
+                alignment: Alignment.topLeft,
+                nip: BubbleNip.leftTop,
+                child: buildChatContent(
+                    widget.record, widget.voiceRecoderProvider,
+                    location: location, area: businessArea)),
+          ),
+        ],
+      ),
+    )
         : Container(
-            padding: EdgeInsets.only(
-                right: ScreenUtil().setWidth(20.0),
-                bottom: ScreenUtil().setWidth(15.0),
-                top: ScreenUtil().setWidth(40.0)),
-            child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Container(
-                    width: ScreenUtil().setWidth(550),
-                    child: Bubble(
-                        padding: widget.record.chatType == CHATTYPE.LOCATION
-                            ? BubbleEdges.all(0)
-                            : BubbleEdges.only(
-                                top: ScreenUtil().setWidth(15),
-                                left: ScreenUtil().setWidth(30),
-                                right: ScreenUtil().setWidth(30)),
-                        margin: BubbleEdges.only(
-                            top: ScreenUtil().setWidth(45.0),
-                            right: ScreenUtil().setWidth(15.0)),
-                        alignment: Alignment.topRight,
-                        nip: BubbleNip.rightTop,
-                        color: Colors.white,
-                        child: buildChatContent(
-                            widget.record, widget.voiceRecoderProvider,
-                            location: location, area: businessArea)),
-                  ),
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(widget.record.avatarUrl),
-                  ),
-                ]),
-          );
+      padding: EdgeInsets.only(
+          right: ScreenUtil().setWidth(20.0),
+          bottom: ScreenUtil().setWidth(15.0),
+          top: ScreenUtil().setWidth(40.0)),
+      child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Container(
+              width: ScreenUtil().setWidth(550),
+              child: Bubble(
+                  padding: widget.record.chatType == CHATTYPE.LOCATION
+                      ? BubbleEdges.all(0)
+                      : BubbleEdges.only(
+                      top: ScreenUtil().setWidth(15),
+                      left: ScreenUtil().setWidth(30),
+                      right: ScreenUtil().setWidth(30)),
+                  margin: BubbleEdges.only(
+                      top: ScreenUtil().setWidth(45.0),
+                      right: ScreenUtil().setWidth(15.0)),
+                  alignment: Alignment.topRight,
+                  nip: BubbleNip.rightTop,
+                  color: Colors.white,
+                  child: buildChatContent(
+                      widget.record, widget.voiceRecoderProvider,
+                      location: location, area: businessArea)),
+            ),
+            CircleAvatar(
+              backgroundImage: NetworkImage(widget.record.avatarUrl),
+            ),
+          ]),
+    );
   }
 
   buildChatContent(ChatRecord record, VoiceRecoderProvider voiceRecoderProvider,
@@ -145,58 +145,58 @@ class _ChatRowState extends State<ChatRow> with SingleTickerProviderStateMixin {
       case CHATTYPE.VOICE:
         return record.sender == SENDER.SELF
             ? GestureDetector(
-                onTap: () async {
-                  if (!voiceRecoderProvider.flutterSound.isPlaying) {
-                    await voiceRecoderProvider
-                        .playVoice(record.voicePath)
-                        .then((_) {
-                      controller.forward().then((_) {
-                        timer = Timer(record.voiceTime, () {
-                          controller.reverse();
-                        });
-                      });
-                    });
-                  } else {
+          onTap: () async {
+            if (!voiceRecoderProvider.flutterSound.isPlaying) {
+              await voiceRecoderProvider
+                  .playVoice(record.voicePath)
+                  .then((_) {
+                controller.forward().then((_) {
+                  timer = Timer(record.voiceTime, () {
                     controller.reverse();
-                    await voiceRecoderProvider.playVoice(record.voicePath);
-                  }
-                },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    AnimatedIcon(
-                        icon: AnimatedIcons.play_pause, progress: controller),
-                    Text(TimeUtil.convertDurationToString(record.voiceTime))
-                  ],
-                ),
-              )
+                  });
+                });
+              });
+            } else {
+              controller.reverse();
+              await voiceRecoderProvider.playVoice(record.voicePath);
+            }
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              AnimatedIcon(
+                  icon: AnimatedIcons.play_pause, progress: controller),
+              Text(TimeUtil.convertDurationToString(record.voiceTime))
+            ],
+          ),
+        )
             : GestureDetector(
-                onTap: () async {
-                  if (!voiceRecoderProvider.flutterSound.isPlaying) {
-                    await voiceRecoderProvider
-                        .playVoice(record.voicePath)
-                        .then((_) {
-                      controller.forward().then((_) {
-                        timer = Timer(record.voiceTime, () {
-                          controller.reverse();
-                        });
-                      });
-                    });
-                  } else {
+          onTap: () async {
+            if (!voiceRecoderProvider.flutterSound.isPlaying) {
+              await voiceRecoderProvider
+                  .playVoice(record.voicePath)
+                  .then((_) {
+                controller.forward().then((_) {
+                  timer = Timer(record.voiceTime, () {
                     controller.reverse();
-                    await voiceRecoderProvider.playVoice(record.voicePath);
-                  }
-                },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text(TimeUtil.convertDurationToString(record.voiceTime)),
-                    VoiceIcon(
-                      controller: controller,
-                    )
-                  ],
-                ),
-              );
+                  });
+                });
+              });
+            } else {
+              controller.reverse();
+              await voiceRecoderProvider.playVoice(record.voicePath);
+            }
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(TimeUtil.convertDurationToString(record.voiceTime)),
+              VoiceIcon(
+                controller: controller,
+              )
+            ],
+          ),
+        );
       case CHATTYPE.IMAGE:
         return GestureDetector(
           onTap: () {
@@ -204,10 +204,10 @@ class _ChatRowState extends State<ChatRow> with SingleTickerProviderStateMixin {
                 context,
                 MaterialPageRoute(
                     builder: (context) => VedioPage(
-                          id: widget.id,
-                          playData: record.videoPath,
-                          coverData: record.picContent,
-                        )));
+                      id: widget.id,
+                      playData: record.videoPath,
+                      coverData: record.picContent,
+                    )));
           },
           child: ClipRRect(
             borderRadius: BorderRadius.circular(6.0),

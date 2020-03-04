@@ -9,8 +9,10 @@ import 'package:flutter_chat/Pages/mainPage.dart';
 import 'package:flutter_chat/Provider/loginProvider.dart';
 import 'package:flutter_chat/Provider/signalRProvider.dart';
 import 'package:flutter_chat/Router/fade_router.dart';
+import 'package:flutter_chat/Utils/imeiUtil.dart';
 import 'package:flutter_chat/Utils/navigatorUtil.dart';
 import 'package:flutter_chat/Utils/sqliteHelper.dart';
+import 'package:flutter_chat/http/API.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gradient_text/gradient_text.dart';
 import 'package:provider/provider.dart';
@@ -125,15 +127,28 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                           color: Colors.black,
                         ),
                         onPressed: () async {
-                          SqliteHelper sqliteHelper = new SqliteHelper();
+                          SqliteHelper sqliteHelper = SqliteHelper();
                           UserLoginModel loginModel =
                               await sqliteHelper.findCurLoginRecord();
+
                           if (loginModel.loginId != "" &&
                               loginModel.loginId != null) {
                             if (DateTime.now()
                                     .difference(loginModel.loginDate)
-                                    .inDays <
-                                5) {}
+                                    .inDays <=
+                                5) {
+                              bool ifSame = await API.checkIfSameIMEI(
+                                  loginModel.loginId, await ImeiUtil.getImei());
+                              if (ifSame == true) {
+                                passLogin();
+                              } else {
+                                normalLogin();
+                              }
+                            } else {
+                              normalLogin();
+                            }
+                          } else {
+                            normalLogin();
                           }
                         },
                       )
@@ -144,18 +159,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
         ),
       ),
     );
-  }
-
-  getImei() async {
-    String imeiT;
-    if (Platform.isIOS) {
-      var iosInfo = await DeviceInfoPlugin().iosInfo;
-      imeiT = iosInfo.identifierForVendor;
-    } else if (Platform.isAndroid) {
-      var andInfo = await DeviceInfoPlugin().androidInfo;
-      imeiT = andInfo.androidId;
-    }
-    return imeiT;
   }
 
   void normalLogin() {
@@ -169,18 +172,13 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
           ],
           child: LoginPage(),
         )),
-        ModalRoute.withName('/'));
+        (route) => false);
   }
 
   void passLogin() {
     Navigator.of(context).pushAndRemoveUntil(
         FadeRoute(
-          page: MultiProvider(
-            providers: [
-              ChangeNotifierProvider(create: (_) => SignalRProvider()),
-            ],
-            child: MainPage(),
-          ),
+          page: MainPage(),
         ),
         ModalRoute.withName('/'));
   }
@@ -222,8 +220,8 @@ class SplashItem extends StatelessWidget {
             fit: StackFit.expand,
             children: <Widget>[
               FadeInImage(
-                fadeOutDuration: Duration(seconds: 2),
-                fadeInDuration: Duration(seconds: 2),
+                fadeOutDuration: Duration(milliseconds: 700),
+                fadeInDuration: Duration(milliseconds: 700),
                 placeholder: AssetImage(
                   fpicUrl,
                 ),

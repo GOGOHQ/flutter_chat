@@ -3,9 +3,6 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat/Pages/splashPage.dart';
-import 'package:flutter_chat/Provider/jPushProvider.dart';
-import 'package:flutter_chat/Provider/loginProvider.dart';
-import 'package:flutter_chat/Provider/signalRProvider.dart';
 import 'package:flutter_chat/Provider/themeProvider.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +12,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemUiOverlayStyle systemUiOverlayStyle =
-      SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+  SystemUiOverlayStyle(statusBarColor: Colors.transparent);
   SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   SharedPreferences sp = await SharedPreferences.getInstance();
   await AmapService.init(

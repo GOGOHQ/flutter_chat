@@ -24,7 +24,7 @@ class LoginPage extends StatelessWidget {
           left: ScreenUtil().setWidth(45.0),
           right: ScreenUtil().setWidth(45.0),
           top: ScreenUtil().setHeight(250),
-          child: LoginBox(),
+          child: provider.curLoginWidget == 1 ? LoginBox() : QuickLoginBox(),
         ),
         Positioned(
             bottom: ScreenUtil().setHeight(230),

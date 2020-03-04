@@ -56,8 +56,6 @@ class _BottomChatRowState extends State<BottomChatRow>
     super.initState();
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
